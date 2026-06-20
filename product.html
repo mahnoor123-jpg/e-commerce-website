@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beauty & Skincare Store</title>
+  <style>
+    :root {
+      --primary: #6d3d52;
+      --accent: #ec6f9f;
+      --accent-dark: #d95789;
+      --bg: #fff8fb;
+      --card: #ffffff;
+      --text: #2f2430;
+      --muted: #7d6d77;
+      --border: #f0dce5;
+      --success: #198754;
+      --error: #d63384;
+      --shadow: 0 18px 40px rgba(109, 61, 82, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #fffafd, #fff2f7);
+      color: var(--text);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      border: none;
+      background: none;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .topbar {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 0.4px;
+    }
+
+    .cart-box {
+      background: var(--card);
+      padding: 10px 16px;
+      border-radius: 999px;
+      box-shadow: 0 10px 24px rgba(109, 61, 82, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cart-count {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 10px 20px 40px;
+    }
+
+    .product-card {
+      background: var(--card);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .main-image {
+      background: #fff3f7;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+    }
+
+    .main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumbs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .thumb {
+      border: 2px solid transparent;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: 0.2s ease;
+    }
+
+    .thumb img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+
+    .thumb.active {
+      border-color: var(--accent);
+      box-shadow: 0 8px 20px rgba(236, 111, 159, 0.18);
+    }
+
+    .thumb:hover {
+      transform: translateY(-2px);
+    }
+
+    .badge {
+      display: inline-block;
+      background: #ffe7f0;
+      color: var(--accent-dark);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      color: var(--primary);
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .price {
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    .old-price {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .discount {
+      background: #eaf8f0;
+      color: var(--success);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .description {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+
+    .option {
+      padding: 18px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .option:first-of-type {
+      border-top: none;
+    }
+
+    .option-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .selected-value {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .sizes,
+    .colors {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .size-btn {
+      padding: 12px 18px;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .size-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent-dark);
+    }
+
+    .size-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .color-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--swatch);
+      box-shadow: inset 0 0 0 3px #fff, 0 0 0 1px #d9c7d0;
+      transition: 0.2s ease;
+      position: relative;
+    }
+
+    .color-btn.active {
+      box-shadow: inset 0 0 0 3px #fff, 0 0 0 3px var(--accent);
+    }
+
+    .color-btn.active::after {
+      content: "✓";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+    }
+
+    .color-btn[aria-label="Pearl"].active::after {
+      color: #333;
+      text-shadow: none;
+    }
+
+    .quantity-box {
+      display: inline-grid;
+      grid-template-columns: 48px 70px 48px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .qty-btn {
+      height: 48px;
+      font-size: 1.3rem;
+      background: #fff;
+    }
+
+    .qty-btn:hover {
+      background: #fff7fa;
+    }
+
+    .qty-input {
+      border: none;
+      outline: none;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .add-cart {
+      width: 100%;
+      margin-top: 22px;
+      background: var(--accent);
+      color: #fff;
+      padding: 16px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 1rem;
+      transition: 0.2s ease;
+      box-shadow: 0 14px 28px rgba(236, 111, 159, 0.25);
+    }
+
+    .add-cart:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .message {
+      min-height: 24px;
+      margin-top: 12px;
+      font-weight: 700;
+    }
+
+    .message.success {
+      color: var(--success);
+    }
+
+    .message.error {
+      color: var(--error);
+    }
+
+    @media (max-width: 920px) {
+      .product-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .topbar,
+      .container {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .product-card {
+        padding: 18px;
+      }
+
+      .quantity-box {
+        grid-template-columns: 44px 60px 44px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">GlowNest</div>
+    <div class="cart-box">
+      <span>🛍 Cart</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="product-card">
+      <div>
+        <div class="main-image">
+          <img
+            id="mainImage"
+            src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1000&q=80"
+            alt="Beauty cream main product image"
+          />
+        </div>
+
+        <div class="thumbs">
+          <button
+            class="thumb active"
+            type="button"
+            data-image="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1000&q=80"
+          >
+            <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=300&q=80" alt="Product thumbnail 1" />
+          </button>
+
+          <button
+            class="thumb"
+            type="button"
+            data-image="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1000&q=80"
+          >
+            <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=300&q=80" alt="Product thumbnail 2" />
+          </button>
+
+          <button
+            class="thumb"
+            type="button"
+            data-image="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1000&q=80"
+          >
+            <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=300&q=80" alt="Product thumbnail 3" />
+          </button>
+
+          <button
+            class="thumb"
+            type="button"
+            data-image="https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=1000&q=80"
+          >
+            <img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=300&q=80" alt="Product thumbnail 4" />
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <span class="badge">Best Seller</span>
+        <h1>Radiance Renewal Face Cream</h1>
+
+        <div class="price-row">
+          <span class="price">$42.99</span>
+          <span class="old-price">$56.99</span>
+          <span class="discount">25% OFF</span>
+        </div>
+
+        <p class="description">
+          A deeply hydrating beauty cream enriched with vitamin C, hyaluronic acid,
+          and botanical extracts to leave your skin soft, bright, and naturally glowing.
+          Perfect for daily skincare routines.
+        </p>
+
+        <div class="option">
+          <div class="option-head">
+            <span>Size</span>
+            <span class="selected-value" id="selectedSize">Not selected</span>
+          </div>
+
+          <div class="sizes">
+            <button class="size-btn" type="button" data-size="30 ml">30 ml</button>
+            <button class="size-btn" type="button" data-size="50 ml">50 ml</button>
+            <button class="size-btn" type="button" data-size="100 ml">100 ml</button>
+          </div>
+        </div>
+
+        <div class="option">
+          <div class="option-head">
+            <span>Color / Variant</span>
+            <span class="selected-value" id="selectedColor">Rose</span>
+          </div>
+
+          <div class="colors">
+            <button class="color-btn active" type="button" data-color="Rose" aria-label="Rose" style="--swatch:#d97b93;"></button>
+            <button class="color-btn" type="button" data-color="Mint" aria-label="Mint" style="--swatch:#9fd8c2;"></button>
+            <button class="color-btn" type="button" data-color="Pearl" aria-label="Pearl" style="--swatch:#f7eef2;"></button>
+          </div>
+        </div>
+
+        <div class="option">
+          <div class="option-head">
+            <span>Quantity</span>
+          </div>
+
+          <div class="quantity-box">
+            <button class="qty-btn" type="button" id="decreaseQty">−</button>
+            <input class="qty-input" id="quantity" type="text" value="1" readonly />
+            <button class="qty-btn" type="button" id="increaseQty">+</button>
+          </div>
+        </div>
+
+        <button class="add-cart" id="addToCart">Add to Cart</button>
+        <p class="message" id="message"></p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const mainImage = document.getElementById("mainImage");
+    const thumbs = document.querySelectorAll(".thumb");
+    const sizeButtons = document.querySelectorAll(".size-btn");
+    const colorButtons = document.querySelectorAll(".color-btn");
+    const selectedSizeText = document.getElementById("selectedSize");
+    const selectedColorText = document.getElementById("selectedColor");
+    const quantityInput = document.getElementById("quantity");
+    const decreaseQty = document.getElementById("decreaseQty");
+    const increaseQty = document.getElementById("increaseQty");
+    const addToCart = document.getElementById("addToCart");
+    const message = document.getElementById("message");
+    const cartCount = document.getElementById("cartCount");
+
+    let selectedSize = null;
+    let selectedColor = "Rose";
+    let quantity = 1;
+    let totalItems = 0;
+
+    thumbs.forEach((thumb) => {
+      thumb.addEventListener("click", () => {
+        thumbs.forEach((item) => item.classList.remove("active"));
+        thumb.classList.add("active");
+        mainImage.src = thumb.dataset.image;
+      });
+    });
+
+    sizeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        sizeButtons.forEach((item) => item.classList.remove("active"));
+        btn.classList.add("active");
+        selectedSize = btn.dataset.size;
+        selectedSizeText.textContent = selectedSize;
+        message.textContent = "";
+        message.className = "message";
+      });
+    });
+
+    colorButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        colorButtons.forEach((item) => item.classList.remove("active"));
+        btn.classList.add("active");
+        selectedColor = btn.dataset.color;
+        selectedColorText.textContent = selectedColor;
+        message.textContent = "";
+        message.className = "message";
+      });
+    });
+
+    function updateQuantity() {
+      quantityInput.value = quantity;
+    }
+
+    decreaseQty.addEventListener("click", () => {
+      if (quantity > 1) {
+        quantity--;
+        updateQuantity();
+      }
+    });
+
+    increaseQty.addEventListener("click", () => {
+      if (quantity < 10) {
+        quantity++;
+        updateQuantity();
+      }
+    });
+
+    addToCart.addEventListener("click", () => {
+      if (!selectedSize) {
+        message.textContent = "Please select a size before adding to cart.";
+        message.className = "message error";
+        return;
+      }
+
+      totalItems += quantity;
+      cartCount.textContent = totalItems;
+
+      message.textContent = `${quantity} item(s) added - ${selectedSize}, ${selectedColor} variant.`;
+      message.className = "message success";
+    });
+  </script>
+</body>
+</html>
+
